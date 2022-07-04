@@ -1,17 +1,14 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import { AppRoutes } from './components/router/AppRoutes';
 
 import './assets/main.css';
 import './styles/App.css';
 import { CacheContextWrapper } from './components/context/CacheContextWrapper';
+import Root from './components/pages/Root';
 
 export function App() {
   return (
     <CacheContextWrapper>
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
+      <Root />
     </CacheContextWrapper>
   );
 }
