@@ -1,9 +1,14 @@
 import React from 'react';
-import './assets/main.css';
-import logo from './logo.svg';
+import { BrowserRouter } from 'react-router-dom';
+import { AppRoutes } from './components/router/AppRoutes';
 
+import './assets/main.css';
 import './styles/App.css';
 
 export function App() {
-  return <div className="App" />;
+  return (
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
+  );
 }
