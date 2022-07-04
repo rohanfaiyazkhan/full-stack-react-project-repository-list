@@ -5,6 +5,7 @@ import { RepoListItem } from './RepoListItem';
 interface RepoListProps {
   repos: Repo[];
   navigateHandler: (index: number) => void;
+  filterBy?: string;
 }
 
 export function RepoList(props: RepoListProps): React.ReactElement<any, any> {
@@ -12,19 +13,27 @@ export function RepoList(props: RepoListProps): React.ReactElement<any, any> {
     return <p>No repositories were found.</p>;
   }
 
-  const sortedRepos = props.repos.sort((prev, next) => {
+  //  Sort repos in reverse chronological order
+  let reposForDisplay = props.repos.sort((prev, next) => {
     const prevCreatedAt = Number(new Date(prev.created_at));
     const nextCreatedAt = Number(new Date(next.created_at));
 
-    return prevCreatedAt - nextCreatedAt;
+    return nextCreatedAt - prevCreatedAt;
   });
+
+  // If language to filter repos by is provided, filter by said language
+  if (props.filterBy !== undefined) {
+    reposForDisplay = reposForDisplay.filter(
+      (val) => val.language === props.filterBy
+    );
+  }
 
   return (
     <ul
       className="flex flex-col lg:grid lg:place-items-stretch"
       style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(24rem, 1fr))' }}
     >
-      {sortedRepos.map((repo) => (
+      {reposForDisplay.map((repo) => (
         <RepoListItem repo={repo} key={repo.id} />
       ))}
     </ul>
