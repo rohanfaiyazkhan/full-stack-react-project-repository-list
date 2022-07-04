@@ -6,4 +6,8 @@ export const config = {
   server: {
     port: process.env.SERVER_PORT || '4000',
   },
+  githubApi: {
+    baseUrl: 'https://api.github.com',
+    username: 'silverorange',
+  },
 };
