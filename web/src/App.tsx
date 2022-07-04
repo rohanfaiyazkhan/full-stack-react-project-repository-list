@@ -4,11 +4,14 @@ import { AppRoutes } from './components/router/AppRoutes';
 
 import './assets/main.css';
 import './styles/App.css';
+import { CacheContextWrapper } from './components/context/CacheContextWrapper';
 
 export function App() {
   return (
-    <BrowserRouter>
-      <AppRoutes />
-    </BrowserRouter>
+    <CacheContextWrapper>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </CacheContextWrapper>
   );
 }
