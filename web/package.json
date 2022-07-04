@@ -23,6 +23,7 @@
     "@types/react": "^17.0.39",
     "@types/react-dom": "^17.0.13",
     "axios": "^0.27.2",
+    "classnames": "^2.3.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-markdown": "^8.0.3",
@@ -39,7 +40,7 @@
     "tailwindcss": "^3.1.4"
   },
   "scripts": {
-    "start": "yarn watch:css && react-scripts start",
+    "start": "react-scripts start",
     "build": "yarn build:css && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -47,6 +48,6 @@
     "prettier": "prettier --list-different 'src/**/*.{scss,css,js,ts,jsx,tsx}'",
     "prettier-write": "prettier --write 'src/**/*.{scss,css,js,ts,jsx,tsx}'",
     "build:css": "postcss ./src/styles/tailwind.css -o ./src/styles/main.css",
-    "watch:css": "postcss ./src/styles/tailwind.css -o ./src/styles/main.css"
+    "watch:css": "postcss -w ./src/styles/tailwind.css -o ./src/styles/main.css"
   }
 }
