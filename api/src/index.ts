@@ -3,7 +3,7 @@ import { createServer } from 'http';
 import { config } from './config';
 import { app } from './app';
 
-const debug = createDebug('api');
+const debug = createDebug('api:root');
 
 /**
  * Normalize a port into a number, string, or false.
