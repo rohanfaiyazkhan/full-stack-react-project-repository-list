@@ -1,9 +1,8 @@
 import axios from 'axios';
-import { config } from '../config';
 import { Repo } from '../models/Repo';
+import { getApiUrl } from '../utils/getApiUrl';
 
-const apiUrl =
-  config.web.serverBaseUrl + ':' + config.web.serverPort + '/repos';
+const apiUrl = getApiUrl();
 
 export function fetchRepositories() {
   return axios.get<Repo[]>(apiUrl);
