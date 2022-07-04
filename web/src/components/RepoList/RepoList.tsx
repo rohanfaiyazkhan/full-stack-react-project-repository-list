@@ -20,7 +20,10 @@ export function RepoList(props: RepoListProps): React.ReactElement<any, any> {
   });
 
   return (
-    <ul className="flex flex-col space-y-2">
+    <ul
+      className="flex flex-col lg:grid lg:place-items-stretch"
+      style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(24rem, 1fr))' }}
+    >
       {sortedRepos.map((repo) => (
         <RepoListItem repo={repo} key={repo.id} />
       ))}
