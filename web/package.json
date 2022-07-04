@@ -35,6 +35,7 @@
     "autoprefixer": "^10.4.7",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "msw": "^0.43.0",
     "postcss-cli": "^10.0.0",
     "prettier": "^2.5.1",
     "tailwindcss": "^3.1.4"
@@ -49,5 +50,8 @@
     "prettier-write": "prettier --write 'src/**/*.{scss,css,js,ts,jsx,tsx}'",
     "build:css": "postcss ./src/styles/tailwind.css -o ./src/styles/main.css",
     "watch:css": "postcss -w ./src/styles/tailwind.css -o ./src/styles/main.css"
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }
