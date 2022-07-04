@@ -1,13 +1,14 @@
 import express, { Response, Request, NextFunction } from 'express';
-import cors from 'cors';
+import cors, { CorsOptions } from 'cors';
 import { repos } from './routes/repos';
 import { terrible } from './middleware/terrible';
 import { AppError } from './models/AppError';
 
 // CORS header configuration
-const corsOptions = {
+const corsOptions: CorsOptions = {
   methods: 'GET',
   allowedHeaders: 'Content-Type,Authorization',
+  origin: '*',
 };
 
 export const app = express();
