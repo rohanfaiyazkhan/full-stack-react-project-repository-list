@@ -7,7 +7,7 @@ interface LanguageSelectProps {
 }
 
 const buttonBaseClasses =
-  'first:ml-0 my-1 mx-2 px-2 py-1 border-2 border-gray-700 rounded-sm transition-colors ';
+  'first:ml-0 my-1 mr-2 px-2 py-1 border-2 border-gray-700 rounded-sm transition-colors ';
 
 const buttonClassNames = {
   default:
