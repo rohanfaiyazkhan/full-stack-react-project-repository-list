@@ -8,13 +8,13 @@ interface RepoListProps {
   filterBy?: string;
 }
 
-export function RepoList(props: RepoListProps): React.ReactElement<any, any> {
-  if (props.repos.length === 0) {
-    return <p>No repositories were found.</p>;
-  }
-
+export function RepoList({
+  repos,
+  navigateHandler,
+  filterBy,
+}: RepoListProps): React.ReactElement<any, any> {
   //  Sort repos in reverse chronological order
-  let reposForDisplay = props.repos.sort((prev, next) => {
+  let reposForDisplay = repos.sort((prev, next) => {
     const prevCreatedAt = Number(new Date(prev.created_at));
     const nextCreatedAt = Number(new Date(next.created_at));
 
@@ -22,19 +22,28 @@ export function RepoList(props: RepoListProps): React.ReactElement<any, any> {
   });
 
   // If language to filter repos by is provided, filter by said language
-  if (props.filterBy !== undefined) {
+  if (filterBy !== undefined) {
     reposForDisplay = reposForDisplay.filter(
-      (val) => val.language === props.filterBy
+      (val) => val.language === filterBy
     );
+  }
+
+  if (reposForDisplay.length === 0) {
+    return <p>No repositories were found.</p>;
   }
 
   return (
     <ul
-      className="flex flex-col lg:grid lg:place-items-stretch lg:gap-2"
+      className="flex flex-col lg:grid lg:place-items-stretch lg:gap-y-2 lg:gap-x-1"
       style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(24rem, 1fr))' }}
     >
       {reposForDisplay.map((repo, idx) => (
-        <RepoListItem repo={repo} key={`${repo.id}-${idx}`} />
+        <RepoListItem
+          repo={repo}
+          index={idx}
+          navigateHandler={navigateHandler}
+          key={`${repo.id}-${idx}`}
+        />
       ))}
     </ul>
   );
