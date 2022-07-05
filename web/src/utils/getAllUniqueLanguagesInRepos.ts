@@ -7,7 +7,9 @@ export function getAllUniqueLanguagesInRepos(repos: Repo[]) {
   const hashmap: Record<string, number> = {};
 
   for (const repo of repos) {
-    hashmap[repo.language] = (hashmap[repo.language] ?? 0) + 1;
+    if (repo.language) {
+      hashmap[repo.language] = (hashmap[repo.language] ?? 0) + 1;
+    }
   }
 
   return Object.keys(hashmap);
