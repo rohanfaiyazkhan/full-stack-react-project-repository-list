@@ -3,11 +3,13 @@ import { useCache } from '../context/cacheContext';
 import { LOADING_STATES } from '../models/LoadingStates';
 import { useFetchRepositoriesCallback } from '../requests/useFetchRepositoriesCallback';
 import { readUnixTimestamp } from '../utils/dateTime';
+import { getAllUniqueLanguagesInRepos } from '../utils/getAllUniqueLanguagesInRepos';
 import {
   NAV_STATE_TYPES,
   useNavigationState,
 } from '../utils/hooks/useNavigationState';
 import { ErrorView } from './ErrorView';
+import { LanguageSelect } from './LanguageSelect';
 import { LoadingView } from './loading/LoadingView';
 import { RepoList } from './RepoList/RepoList';
 import { RepoView } from './RepoView';
@@ -15,7 +17,8 @@ import { RepoView } from './RepoView';
 export function Root(
   props: Record<string, never>
 ): React.ReactElement<any, any> {
-  const [nav, returnToRoot, viewRepository] = useNavigationState();
+  const [nav, returnToRoot, viewRepository, setLanguageFilter] =
+    useNavigationState();
 
   const cacheState = useCache();
 
@@ -38,6 +41,11 @@ export function Root(
     nav.repoIndex >= 0 &&
     cacheState.resource !== undefined &&
     nav.repoIndex < cacheState.resource.length;
+
+  const allLanguages =
+    cacheState.resource !== undefined
+      ? getAllUniqueLanguagesInRepos(cacheState.resource)
+      : [];
 
   return (
     <main className="w-full max-w-screen-xl mx-auto px-2 md:px-4 xl:px-0 py-2 md:py-4 xl:py-16">
@@ -70,10 +78,18 @@ export function Root(
             </ErrorView>
           )}
           {cacheState.resource !== undefined && (
-            <RepoList
-              repos={cacheState.resource}
-              navigateHandler={viewRepository}
-            />
+            <>
+              <LanguageSelect
+                languages={allLanguages}
+                setLanguageFilter={setLanguageFilter}
+                current={nav.filterLanguage}
+              />
+              <RepoList
+                repos={cacheState.resource}
+                navigateHandler={viewRepository}
+                filterBy={nav.filterLanguage}
+              />
+            </>
           )}
         </>
       ) : (

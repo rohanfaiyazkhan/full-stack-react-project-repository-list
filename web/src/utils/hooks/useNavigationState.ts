@@ -6,8 +6,14 @@ export const NAV_STATE_TYPES = Object.freeze({
 });
 
 interface NavigationState {
+  // State is one of NAV_STATE_TYPES
   state: string;
+
+  // If viewing a repository, which one?
   repoIndex: number;
+
+  // Filtering by which language
+  filterLanguage?: string;
 }
 
 const initialState: NavigationState = {
@@ -18,7 +24,8 @@ const initialState: NavigationState = {
 type NavigationStateReturnTuple = [
   NavigationState,
   () => void,
-  (index: number) => void
+  (index: number) => void,
+  (filterLanguage?: string) => void
 ];
 
 /**
@@ -29,27 +36,26 @@ export function useNavigationState(): NavigationStateReturnTuple {
   const [state, setState] = useState<NavigationState>(initialState);
 
   const returnToRoot = useCallback(() => {
-    // If window history was manipulated (see viewRepo), pop history stack
-    if (window.history.state?.state === NAV_STATE_TYPES.VIEWING_REPO) {
-      window.history.back();
-    }
-
-    setState(initialState);
+    setState((prev) => ({
+      ...prev,
+      ...initialState,
+    }));
   }, []);
 
   const viewRepo = useCallback((index: number) => {
-    const newState = {
+    setState((prev) => ({
+      ...prev,
       state: NAV_STATE_TYPES.VIEWING_REPO,
       repoIndex: index,
-    };
-
-    // Pushing to history state so that pressing back can return to root view
-    const url = new URL(window.location.toString());
-    url.searchParams.set('viewing', index.toString());
-    window.history.pushState(newState, '', url);
-
-    setState(newState);
+    }));
   }, []);
 
-  return [state, returnToRoot, viewRepo];
+  const setLanguageFilter = useCallback((filterLanguage?: string) => {
+    setState((prev) => ({
+      ...prev,
+      filterLanguage: filterLanguage ?? undefined,
+    }));
+  }, []);
+
+  return [state, returnToRoot, viewRepo, setLanguageFilter];
 }
