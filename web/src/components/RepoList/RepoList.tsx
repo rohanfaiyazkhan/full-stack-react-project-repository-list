@@ -30,11 +30,11 @@ export function RepoList(props: RepoListProps): React.ReactElement<any, any> {
 
   return (
     <ul
-      className="flex flex-col lg:grid lg:place-items-stretch"
+      className="flex flex-col lg:grid lg:place-items-stretch lg:gap-2"
       style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(24rem, 1fr))' }}
     >
-      {reposForDisplay.map((repo) => (
-        <RepoListItem repo={repo} key={repo.id} />
+      {reposForDisplay.map((repo, idx) => (
+        <RepoListItem repo={repo} key={`${repo.id}-${idx}`} />
       ))}
     </ul>
   );
