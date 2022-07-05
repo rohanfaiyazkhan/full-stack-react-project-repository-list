@@ -20,7 +20,7 @@ export function Root(
   const [nav, returnToRoot, viewRepository, setLanguageFilter] =
     useNavigationState();
 
-  const cacheState = useCache();
+  const cacheState = useCache()?.repositories;
 
   const fetchCallback = useFetchRepositoriesCallback({
     // Verbose logs when dispatching actions in dev mode
@@ -33,18 +33,18 @@ export function Root(
   }, [fetchCallback]);
 
   const isShowingList = nav.state === NAV_STATE_TYPES.ROOT;
-  const isLoading = cacheState.loadingState === LOADING_STATES.LOADING;
-  const isError = cacheState.loadingState === LOADING_STATES.FAILURE;
+  const isLoading = cacheState?.loadingState === LOADING_STATES.LOADING;
+  const isError = cacheState?.loadingState === LOADING_STATES.FAILURE;
 
   const showRepositoryView =
     nav.state === NAV_STATE_TYPES.VIEWING_REPO &&
     nav.repoIndex >= 0 &&
-    cacheState.resource !== undefined &&
-    nav.repoIndex < cacheState.resource.length;
+    cacheState?.resource !== undefined &&
+    nav.repoIndex < cacheState?.resource.length;
 
   const allLanguages =
-    cacheState.resource !== undefined
-      ? getAllUniqueLanguagesInRepos(cacheState.resource)
+    cacheState?.resource !== undefined
+      ? getAllUniqueLanguagesInRepos(cacheState?.resource)
       : [];
 
   return (
@@ -59,12 +59,12 @@ export function Root(
           {isError && (
             <ErrorView>
               Sorry, we were unable to fetch repositories.{' '}
-              {cacheState.resource && cacheState.resource.length > 0 && (
+              {cacheState?.resource && cacheState?.resource.length > 0 && (
                 <>
                   Showing stale data{' '}
-                  {cacheState.fetchedOn &&
+                  {cacheState?.fetchedOn &&
                     `from ${readUnixTimestamp(
-                      cacheState.fetchedOn
+                      cacheState?.fetchedOn
                     ).toLocaleString()}`}
                   .
                 </>
@@ -77,7 +77,7 @@ export function Root(
               </button>
             </ErrorView>
           )}
-          {cacheState.resource !== undefined && (
+          {cacheState?.resource !== undefined && (
             <>
               <LanguageSelect
                 languages={allLanguages}
@@ -85,7 +85,7 @@ export function Root(
                 current={nav.filterLanguage}
               />
               <RepoList
-                repos={cacheState.resource}
+                repos={cacheState?.resource}
                 navigateHandler={viewRepository}
                 filterBy={nav.filterLanguage}
               />
@@ -95,7 +95,7 @@ export function Root(
       ) : (
         showRepositoryView && (
           <RepoView
-            repo={cacheState.resource![nav.repoIndex]}
+            repo={cacheState?.resource![nav.repoIndex]}
             returnToRootHandler={returnToRoot}
           />
         )
