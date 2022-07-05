@@ -7,9 +7,9 @@ let workerReady: Promise<{ worker: SetupWorkerApi }> | undefined;
 
 // This specifies the mock server should start in development mode
 // Comment/uncomment this block to disable/enable this functionality
-if (process.env.NODE_ENV === 'development') {
-  workerReady = import('./mocks/browser');
-}
+// if (process.env.NODE_ENV === 'development') {
+//   workerReady = import('./mocks/browser');
+// }
 
 async function run() {
   // If in development mode, wait till mock server starts before launcing app
