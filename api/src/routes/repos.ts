@@ -15,14 +15,14 @@ repos.get('/', async (_: Request, res: Response, next: NextFunction) => {
   try {
     const result = await axios.get<Repo[]>(getGithubApiUrl());
 
-    const data = result.data
-    
+    const data = result.data;
+
     // Data should at least be an empty array. If it's undefined, something has gone wrong
-    if(data === undefined){
-      next(new AppError("Repository data is empty", 404))
+    if (data === undefined) {
+      next(new AppError('Repository data is empty', 404));
     }
 
-    const filteredData = data.filter(repo => !repo.fork)
+    const filteredData = data.filter((repo) => !repo.fork);
 
     res.status(200);
     res.json(filteredData);
