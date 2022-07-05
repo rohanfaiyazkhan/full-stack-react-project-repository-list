@@ -18,20 +18,20 @@ export function useFetchRepositoriesCallback(
   return useCallback(() => {
     const fetchPromise = fetchRepositories();
     dispatch({
-      type: CACHE_ACTION_TYPES.REQUEST,
+      type: CACHE_ACTION_TYPES.REPOSITORIES_REQUEST,
     });
 
     fetchPromise
       .then((res) => {
         dispatch({
-          type: CACHE_ACTION_TYPES.REQUEST_SUCCESS,
+          type: CACHE_ACTION_TYPES.REPOSITORIES_REQUEST_SUCCESS,
           payload: res,
           debug,
         });
       })
       .catch((err: AxiosError<ApiError>) => {
         dispatch({
-          type: CACHE_ACTION_TYPES.REQUEST_FAILURE,
+          type: CACHE_ACTION_TYPES.REPOSITORIES_REQUEST_FAILURE,
           payload: err.message,
           debug,
         });
