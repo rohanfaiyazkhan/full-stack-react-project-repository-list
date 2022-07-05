@@ -1,5 +1,5 @@
-import { AxiosResponse } from 'axios';
 import { ApiError } from '../models/ApiError';
+import { Commit } from '../models/Commit';
 import { DataCache } from '../models/DataCache';
 import { DispatchedAction } from '../models/DispatchedAction';
 import { LOADING_STATES } from '../models/LoadingStates';
@@ -12,7 +12,7 @@ export const initialCacheState: DataCache = {};
 
 export function cacheReducer(
   state = initialCacheState,
-  action: DispatchedAction<string, AxiosResponse<Repo[] | ApiError>>
+  action: DispatchedAction
 ): DataCache {
   const timestamp = getCurrentTimeStamp();
 
@@ -24,25 +24,87 @@ export function cacheReducer(
   }
 
   switch (action.type) {
-    case CACHE_ACTION_TYPES.REQUEST:
+    case CACHE_ACTION_TYPES.REPOSITORIES_REQUEST:
       return {
         ...state,
-        requestOn: timestamp,
-        loadingState: LOADING_STATES.LOADING,
+        repositories: {
+          ...state?.repositories,
+          requestOn: timestamp,
+          loadingState: LOADING_STATES.LOADING,
+        },
       };
-    case CACHE_ACTION_TYPES.REQUEST_SUCCESS:
+    case CACHE_ACTION_TYPES.REPOSITORIES_REQUEST_SUCCESS:
       return {
         ...state,
-        loadingState: LOADING_STATES.SUCCESS,
-        fetchedOn: timestamp,
-        resource: action?.payload?.data as Repo[],
+        repositories: {
+          ...state?.repositories,
+          loadingState: LOADING_STATES.SUCCESS,
+          fetchedOn: timestamp,
+          resource: action?.payload?.data as Repo[],
+        },
       };
-    case CACHE_ACTION_TYPES.REQUEST_FAILURE:
+    case CACHE_ACTION_TYPES.REPOSITORIES_REQUEST_FAILURE:
       return {
         ...state,
-        loadingState: LOADING_STATES.FAILURE,
-        failedOn: timestamp,
-        error: action?.payload?.data as ApiError,
+        repositories: {
+          ...state?.repositories,
+          loadingState: LOADING_STATES.FAILURE,
+          failedOn: timestamp,
+          error: action?.payload?.data as ApiError,
+        },
+      };
+    case CACHE_ACTION_TYPES.COMMITS_REQUEST:
+      if (!action.payload.id) {
+        console.error('Repo ID not provided with commits request');
+        return state;
+      }
+
+      return {
+        ...state,
+        commits: {
+          ...state?.commits,
+          [action.payload.id]: {
+            ...state?.commits?.[action.payload.id],
+            requestOn: timestamp,
+            loadingState: LOADING_STATES.LOADING,
+          },
+        },
+      };
+    case CACHE_ACTION_TYPES.COMMITS_REQUEST_SUCCESS:
+      if (!action.payload.id) {
+        console.error('Repo ID not provided with commits request');
+        return state;
+      }
+
+      return {
+        ...state,
+        commits: {
+          ...state?.commits,
+          [action.payload.id]: {
+            ...state?.commits?.[action.payload.id],
+            loadingState: LOADING_STATES.SUCCESS,
+            fetchedOn: timestamp,
+            resource: action?.payload?.response?.data as Commit[],
+          },
+        },
+      };
+    case CACHE_ACTION_TYPES.COMMITS_REQUEST_FAILURE:
+      if (!action.payload.id) {
+        console.error('Repo ID not provided with commits request');
+        return state;
+      }
+
+      return {
+        ...state,
+        commits: {
+          ...state?.commits,
+          [action.payload.id]: {
+            ...state?.commits?.[action.payload.id],
+            loadingState: LOADING_STATES.FAILURE,
+            failedOn: timestamp,
+            error: action?.payload?.error as ApiError,
+          },
+        },
       };
     default:
       return state;
