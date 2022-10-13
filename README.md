@@ -20,9 +20,7 @@ your browser or another HTTP client.
 
 ## Running the React Client (/web)
 
-The React client is a bare Create React App application.
-
-### Running the Expo Application
+To run the React frontend, you can run:
 
 ```sh
 cd web/
